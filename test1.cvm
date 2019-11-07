@@ -1,0 +1,23 @@
+22
+12; MOV
+21; R21
+-345; Num
+1;
+21
+12; MOV
+1registro
+test77
+20; CALL
+13; Pos
+1; Display
+-1; Tutti R
+0: Halt
+74; JPOS
+21; Pos
+21; R21
+12; MOV
+21; R21
+14; Num
+22; JUMP
+13; Pos
+21; RET
