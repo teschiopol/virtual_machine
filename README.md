@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/teschiopol/virtual_machine/badge)](https://www.codefactor.io/repository/github/teschiopol/virtual_machine)
+
 # virtual_machine
 A simple virtual machine in c
 
