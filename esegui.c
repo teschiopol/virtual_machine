@@ -42,6 +42,29 @@ int i=0;
 * L'incremento nei singoli casi è per accedere ai parametri
 * legati alle relative istruzioni.
 */
+
+/*
+* Funzioni refactoring
+*/
+
+void push(){}
+void pop(){}
+void add(){}
+void sub(){}
+void mul(){}
+void div(){}
+void display(){}
+void print_stack(){}
+void mov(){}
+void jmp(){}
+void jz(){}
+void jpos(){}
+void jneg(){}
+void call(){}
+void ret(){}
+void jcr(){}
+void jcn(){}
+
 void valuta_esegui(int istr){
   switch(istr){
     case HALT:{
