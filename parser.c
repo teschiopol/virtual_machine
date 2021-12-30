@@ -10,6 +10,31 @@
 * tutti i numeri del codice macchina in un array allocato dinamicamente.
 */
 
+int check(char *buffer, int rif, int *flag, int count){
+  if (buffer[rif]==' '){
+      rif++;
+  }
+  if (buffer[rif] == ';'){
+      buffer[rif] = '\0';
+      while(rif!=count){
+          rif++;
+          buffer[rif]=' ';
+      }
+  }
+  if (buffer[rif]==45 && (buffer[rif+1]>47 || buffer[rif+1]<58)){
+      rif++;
+  }else{
+      if (buffer[rif]<48 || buffer[rif]>57){
+          buffer[rif]=' ';
+          rif++;
+      }else{
+          flag=1;
+          rif++;
+      }
+  }
+  return rif;
+}
+
 void leggi(char *input){
   FILE* stream;
   char *buffer=NULL;
@@ -41,27 +66,7 @@ void leggi(char *input){
       flag=0;
       rif=0;
       while (rif<count){
-        if (buffer[rif]==' '){
-          rif++;
-        }
-        if (buffer[rif] == ';'){
-          buffer[rif] = '\0';
-          while(rif!=count){
-            rif++;
-            buffer[rif]=' ';
-          }
-        }
-        if (buffer[rif]==45 && (buffer[rif+1]>47 || buffer[rif+1]<58)){
-          rif++;
-        }else{
-          if (buffer[rif]<48 || buffer[rif]>57){
-            buffer[rif]=' ';
-            rif++;
-          }else{
-            flag=1;
-            rif++;
-          }
-        }
+        rif = check(buffer, rif, &flag, count);
       }
       /* Salva i valori del codice macchina nell'array */
       if (flag){
