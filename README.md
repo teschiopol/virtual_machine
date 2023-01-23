@@ -1,11 +1,12 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/teschiopol/virtual_machine/badge)](https://www.codefactor.io/repository/github/teschiopol/virtual_machine)
 
-# virtual_machine
-A simple virtual machine in c
+# 💾 Virtual Machine
 
-Use Makefile to simple use the program
+A simple virtual machine in C.
 
+Use Makefile to run the program.
 
+## 📂 Files
 
 **main.c**
 Avviene il controllo del numero di parametri passati da linea di comando, insieme alla corretta sintassi dei comandi “esegui” e “stampa”.
@@ -25,7 +26,8 @@ Tutto lo sviluppo del comando “esegui” con uno switch come corpo portante pe
 **stampa.c**
 Tutto lo sviluppo del comando “stampa” con uno switch come corpo portante per gestire al meglio la stampa delle varie istruzioni.
 
-**Test Case:**
+## 📝 Test Case
+
 - test: Fattoriale 5
 - test1: Cambia numero negativo con positivo e poi stampa tutti i registri
 - test2: Errore divisore 0

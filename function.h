@@ -6,6 +6,39 @@ void valuta_esegui(int istr);
 
 void esegui(char *argv);
 
+void push();
+
+void pop();
+
+void add();
+
+void sub();
+
+void mul();
+
+void div();
+
+void jmp();
+
+void jz();
+
+void jpos();
+
+void jneg();
+
+void display();
+
+void print_stack();
+
+void call();
+
+void ret();
+
+void mov();
+
+void jcn();
+
+void jcr();
 
 /* Funzioni stampa.c */
 
