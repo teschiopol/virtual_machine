@@ -18,6 +18,14 @@ void mul();
 
 void div();
 
+void jmp();
+
+void jz();
+
+void jpos();
+
+void jneg();
+
 /* Funzioni stampa.c */
 
 void valuta_stampa(int istr);

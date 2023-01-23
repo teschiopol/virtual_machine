@@ -168,6 +168,79 @@ void div(){
   }
 }
 
+void jmp(){
+  p1=program[ip_e+1];
+  if ((p1>=dim[0])||p1<0){
+    printf("\nErrore indice\n");
+    valuta_esegui(0);
+  }else{
+    ip_e=p1-1;
+  }
+}
+
+void jz(){
+  p2=program[ip_e+2];
+  if (p2<0 || p2>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    p3=registers[p2];
+    if(p3==0){
+      p1=program[ip_e+1];
+      if ((p1>=dim[0])||p1<0){
+        printf("\nErrore indice\n");
+        valuta_esegui(0);
+      }else{
+        ip_e=p1-1;
+      }
+    }else{
+      ip_e+=2;
+    }
+  }
+}
+
+void jpos(){
+  p2=program[ip_e+2];
+  if (p2<0 || p2>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    p3=registers[p2];
+    if(p3>0){
+      p1=program[ip_e+1];
+      if ((p1>=dim[0])||p1<0){
+        printf("\nErrore indice\n");
+        valuta_esegui(0);
+      }else{
+        ip_e=p1-1;
+      }
+    }else{
+      ip_e+=2;
+    }
+  }
+}
+
+void jneg(){
+  p2=program[ip_e+2];
+  if (p2<0 || p2>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    p3=registers[p2];
+    if(p3<0){
+      p1=program[ip_e+1];
+      if ((p1>=dim[0])||p1<0){
+        printf("\nErrore indice\n");
+        valuta_esegui(0);
+      }else{
+        ip_e=p1-1;
+      }
+    }else{
+      ip_e+=2;
+    }
+  }
+}
+
 void valuta_esegui(int istr){
   switch(istr){
     case HALT:{
@@ -250,87 +323,20 @@ void valuta_esegui(int istr){
       }
     }
     case JMP:{
-      p1=program[ip_e+1];
-      if ((p1>=dim[0])||p1<0){
-        printf("\nErrore indice\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        ip_e=p1-1;
-        break;
-      }
+      jmp();
+      break;
     }
     case JZ:{
-      p2=program[ip_e+2];
-      if (p2<0 || p2>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        p3=registers[p2];
-      }
-      if(p3==0){
-        p1=program[ip_e+1];
-        if ((p1>=dim[0])||p1<0){
-          printf("\nErrore indice\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          ip_e=p1-1;
-          break;
-        }
-      }else{
-        ip_e+=2;
-        break;
-      }
+      jz();
+      break;
     }
     case JPOS:{
-      p2=program[ip_e+2];
-      if (p2<0 || p2>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        p3=registers[p2];
-      }
-      if(p3>0){
-        p1=program[ip_e+1];
-        if ((p1>=dim[0])||p1<0){
-          printf("\nErrore indice\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          ip_e=p1-1;
-          break;
-        }
-      }else{
-        ip_e+=2;
-        break;
-      }
+      jpos();
+      break;
     }
     case JNEG:{
-      p2=program[ip_e+2];
-      if (p2<0 || p2>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        p3=registers[p2];
-      }
-      if(p3<0){
-        p1=program[ip_e+1];
-        if ((p1>=dim[0])||p1<0){
-          printf("\nErrore indice\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          ip_e=p1-1;
-          break;
-        }
-      }else{
-        ip_e+=2;
-        break;
-      }
+      jneg();
+      break;
     }
     case CALL:{
       if (sp_e>=16384){
