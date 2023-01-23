@@ -26,6 +26,20 @@ void jpos();
 
 void jneg();
 
+void display();
+
+void print_stack();
+
+void call();
+
+void ret();
+
+void mov();
+
+void jcn();
+
+void jcr();
+
 /* Funzioni stampa.c */
 
 void valuta_stampa(int istr);

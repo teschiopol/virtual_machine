@@ -241,6 +241,131 @@ void jneg(){
   }
 }
 
+void display(){
+  ip_e++;
+  if (program[ip_e]==-1){
+    for(i=0; i<32; i++){
+      printf("\nRegistro R%d = %d\n", i, registers[i]);
+    }
+  }else if (program[ip_e]<0 || program[ip_e]>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    printf("\nRegistro R%d = %d\n", program[ip_e], registers[program[ip_e]]);
+  }
+}
+
+void print_stack(){
+  if (sp_e==0 || sp_e>16384){
+    printf("\nErrore Stack Non Valido\n");
+    valuta_esegui(0);
+  }else{
+    ip_e++;
+    p1=sp_e;
+    p2=program[ip_e];
+    if (p2<=0){
+      printf("\nValore N Non Valido\n");
+      valuta_esegui(0);
+    }else{
+      while(p2!=0 && sp_e>0){
+        sp_e--;
+        printf("\nIndice: %d\nContenuto: %d\n", sp_e, stack[sp_e]);
+        p2--;
+      }
+      sp_e=p1;
+    }
+  }
+}
+
+void mov(){
+  p1=program[ip_e+1];
+  ip_e+=2;
+  if (p1<0 || p1>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    registers[p1]=program[ip_e];
+  }
+}
+
+void call(){
+  if (sp_e>=16384){
+    printf("\nErrore Stack Overflow\n");
+    valuta_esegui(0);
+  }else{
+    stack[sp_e] = ip_e+2;
+    sp_e++;
+    p1=program[ip_e+1];
+    if ((p1>=dim[0])||p1<0){
+      printf("\nErrore indice\n");
+      valuta_esegui(0);
+    }else{
+      ip_e=p1-1;
+    }
+  }
+}
+
+void ret(){
+  if (sp_e==0){
+    printf("\nErrore Stack Underflow\n");
+    valuta_esegui(0);
+  }else{
+    if (sp_e>16384){
+      printf("\nErrore Stack Overflow\n");
+      valuta_esegui(0);
+    }else{
+      sp_e--;
+      p1=stack[sp_e];
+      ip_e=p1-1;
+    }
+  }
+}
+
+void jcr(){
+  p2=program[ip_e+2];
+  p3=program[ip_e+3];
+  if (p2<0 || p2>31 || p3<0 || p3>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    p2=registers[program[ip_e+2]];
+    p3=registers[program[ip_e+3]];
+    if(p2==p3){
+      p1=program[ip_e+1];
+      if ((p1>=dim[0])||p1<0){
+        printf("\nErrore indice\n");
+        valuta_esegui(0);
+      }else{
+        ip_e=p1-1;
+      }
+    }else{
+      ip_e+=3;
+    }
+  }
+}
+
+void jcn(){
+  p2=program[ip_e+2];
+  p3=program[ip_e+3];
+  if (p2<0 || p2>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    p2=registers[program[ip_e+2]];
+    if(p2==p3){
+      p1=program[ip_e+1];
+      if ((p1>=dim[0])||p1<0){
+        printf("\nErrore indice\n");
+        valuta_esegui(0);
+      }else{
+        ip_e=p1-1;
+      }
+    }else{
+      ip_e+=3;
+    }
+  }
+}
+
 void valuta_esegui(int istr){
   switch(istr){
     case HALT:{
@@ -272,55 +397,16 @@ void valuta_esegui(int istr){
       break;
     }
     case DISPLAY:{
-      ip_e++;
-      if (program[ip_e]==-1){
-        for(i=0; i<32; i++){
-          printf("\nRegistro R%d = %d\n", i, registers[i]);
-        }
-        break;
-      }
-      if (program[ip_e]<0 || program[ip_e]>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        printf("\nRegistro R%d = %d\n", program[ip_e], registers[program[ip_e]]);
-        break;
-      }
+      display();
+      break;
     }
     case PRINT_STACK:{
-      if (sp_e==0 || sp_e>16384){
-        printf("\nErrore Stack Non Valido\n");
-        valuta_esegui(0);
-        break;
-      }
-      ip_e++;
-      p1=sp_e;
-      p2=program[ip_e];
-      if (p2<=0){
-        printf("\nValore N Non Valido\n");
-        valuta_esegui(0);
-        break;
-      }
-      while(p2!=0 && sp_e>0){
-        sp_e--;
-        printf("\nIndice: %d\nContenuto: %d\n", sp_e, stack[sp_e]);
-        p2--;
-      }
-      sp_e=p1;
+      print_stack();
       break;
     }
     case MOV:{
-      p1=program[ip_e+1];
-      ip_e+=2;
-      if (p1<0 || p1>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        registers[p1]=program[ip_e];
-        break;
-      }
+      mov();
+      break;
     }
     case JMP:{
       jmp();
@@ -339,89 +425,20 @@ void valuta_esegui(int istr){
       break;
     }
     case CALL:{
-      if (sp_e>=16384){
-        printf("\nErrore Stack Overflow\n");
-        valuta_esegui(0);
-        break;
-      }
-      stack[sp_e] = ip_e+2;
-      sp_e++;
-      p1=program[ip_e+1];
-      if ((p1>=dim[0])||p1<0){
-        printf("\nErrore indice\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        ip_e=p1-1;
-        break;
-      }
+      call();
+      break;
     }
     case RET:{
-      if (sp_e==0){
-        printf("\nErrore Stack Underflow\n");
-        valuta_esegui(0);
-        break;
-      }
-      if (sp_e>16384){
-        printf("\nErrore Stack Overflow\n");
-        valuta_esegui(0);
-        break;
-      }
-      sp_e--;
-      p1=stack[sp_e];
-      ip_e=p1-1;
+      ret();
       break;
     }
     case JCR:{
-      p2=program[ip_e+2];
-      p3=program[ip_e+3];
-      if (p2<0 || p2>31 || p3<0 || p3>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        p2=registers[program[ip_e+2]];
-        p3=registers[program[ip_e+3]];
-      }
-      if(p2==p3){
-        p1=program[ip_e+1];
-        if ((p1>=dim[0])||p1<0){
-          printf("\nErrore indice\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          ip_e=p1-1;
-          break;
-        }
-      }else{
-        ip_e+=3;
-        break;
-      }
+      jcr();
+      break;
     }
     case JCN:{
-      p2=program[ip_e+2];
-      p3=program[ip_e+3];
-      if (p2<0 || p2>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        p2=registers[program[ip_e+2]];
-      }
-      if(p2==p3){
-        p1=program[ip_e+1];
-        if ((p1>=dim[0])||p1<0){
-          printf("\nErrore indice\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          ip_e=p1-1;
-          break;
-        }
-      }else{
-        ip_e+=3;
-        break;
-      }
+      jcn();
+      break;
     }
     default:{
       printf("\nIstruzione non riconosciuta: [%d] -> %d\n", ip_e, program[ip_e]);
