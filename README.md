@@ -2,9 +2,9 @@
 
 # 💾 Virtual Machine
 
-A simple virtual machine in c
+A simple virtual machine in C.
 
-Use Makefile to simple use the program
+Use Makefile to run the program.
 
 ## 📂 Files
 

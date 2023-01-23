@@ -18,28 +18,6 @@ void mul();
 
 void div();
 
-void display();
-
-void print_stack();
-
-void mov();
-
-void jmp();
-
-void jz();
-
-void jpos();
-
-void jneg();
-
-void call();
-
-void ret();
-
-void jcr();
-
-void jcn();
-
 /* Funzioni stampa.c */
 
 void valuta_stampa(int istr);

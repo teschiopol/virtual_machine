@@ -47,23 +47,126 @@ int i=0;
 * Funzioni refactoring
 */
 
-void push(){}
-void pop(){}
-void add(){}
-void sub(){}
-void mul(){}
-void div(){}
-void display(){}
-void print_stack(){}
-void mov(){}
-void jmp(){}
-void jz(){}
-void jpos(){}
-void jneg(){}
-void call(){}
-void ret(){}
-void jcr(){}
-void jcn(){}
+void push(){
+  if (sp_e>=16384){
+    printf("\nErrore Stack Overflow\n");
+    valuta_esegui(0);
+  }else{
+    ip_e++;
+    if (program[ip_e]<0 || program[ip_e]>31){
+      printf("\nErrore registro\n");
+      valuta_esegui(0);
+    }else{
+      stack[sp_e] = registers[program[ip_e]];
+      sp_e++;
+    }
+  }
+}
+
+void pop(){
+  if (sp_e==0){
+    printf("\nErrore Stack Underflow\n");
+    valuta_esegui(0);
+  }else if(sp_e>16384){
+    printf("\nErrore Stack Overflow\n");
+    valuta_esegui(0);
+  }
+  ip_e++;
+  if (program[ip_e]<0 || program[ip_e]>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    sp_e--;
+    registers[program[ip_e]] = stack[sp_e];  
+  }
+}
+
+void add(){
+  ip_e++;
+  p1=program[ip_e];
+  ip_e++;
+  p2=program[ip_e];
+  ip_e++;
+  p3=program[ip_e];
+  if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    cast_overflow=(long)registers[p1]+(long)registers[p2];
+    if(cast_overflow>max || cast_overflow<min){
+      printf("\nOverflow Aritmetico\n");
+      valuta_esegui(0);
+    }else{
+      registers[p3]=registers[p1]+registers[p2];
+    }
+  }
+}
+
+void sub(){
+  ip_e++;
+  p1=program[ip_e];
+  ip_e++;
+  p2=program[ip_e];
+  ip_e++;
+  p3=program[ip_e];
+  if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    cast_overflow=(long)registers[p1]-(long)registers[p2];
+    if(cast_overflow>max || cast_overflow<min){
+      printf("\nOverflow Aritmetico\n");
+      valuta_esegui(0);
+     }else{
+        registers[p3]=registers[p1]-registers[p2];
+      }
+  }
+}
+
+void mul(){
+  ip_e++;
+  p1=program[ip_e];
+  ip_e++;
+  p2=program[ip_e];
+  ip_e++;
+  p3=program[ip_e];
+  if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else{
+    cast_overflow=(long)registers[p1]*(long)registers[p2];
+    if(cast_overflow>max || cast_overflow<min){
+      printf("\nOverflow Aritmetico\n");
+      valuta_esegui(0);
+    }else{
+      registers[p3]=registers[p1]*registers[p2];
+    }
+  }
+}
+
+void div(){
+  ip_e++;
+  p1=program[ip_e];
+  ip_e++;
+  p2=program[ip_e];
+  ip_e++;
+  p3=program[ip_e];
+  if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
+    printf("\nErrore registro\n");
+    valuta_esegui(0);
+  }else if(registers[p2]==0){
+    printf("\nDivisore è 0\n");
+    valuta_esegui(0);
+  }else{
+    cast_overflow=(long)registers[p1]/(long)registers[p2];
+    if(cast_overflow>max || cast_overflow<min){
+      printf("\nOverflow Aritmetico\n");
+      valuta_esegui(0);
+    }else{
+      registers[p3]=registers[p1]/registers[p2];
+    }
+  }
+}
 
 void valuta_esegui(int istr){
   switch(istr){
@@ -72,140 +175,28 @@ void valuta_esegui(int istr){
       break;
     }
     case PUSH:{
-      if (sp_e>=16384){
-        printf("\nErrore Stack Overflow\n");
-        valuta_esegui(0);
-        break;
-      }
-      ip_e++;
-      if (program[ip_e]<0 || program[ip_e]>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        stack[sp_e] = registers[program[ip_e]];
-        sp_e++;
-        break;
-      }
+      push();
+      break;
     }
     case POP:{
-      if (sp_e==0){
-        printf("\nErrore Stack Underflow\n");
-        valuta_esegui(0);
-        break;
-      }
-      if(sp_e>16384){
-        printf("\nErrore Stack Overflow\n");
-        valuta_esegui(0);
-        break;
-      }
-      ip_e++;
-      if (program[ip_e]<0 || program[ip_e]>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        sp_e--;
-        registers[program[ip_e]] = stack[sp_e];
-        break;
-      }
+      pop();
+      break;
     }
     case ADD:{
-      ip_e++;
-      p1=program[ip_e];
-      ip_e++;
-      p2=program[ip_e];
-      ip_e++;
-      p3=program[ip_e];
-      if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        cast_overflow=(long)registers[p1]+(long)registers[p2];
-        if(cast_overflow>max || cast_overflow<min){
-          printf("\nOverflow Aritmetico\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          registers[p3]=registers[p1]+registers[p2];
-          break;
-        }
-      }
+      add();
+      break;
     }
     case SUB:{
-      ip_e++;
-      p1=program[ip_e];
-      ip_e++;
-      p2=program[ip_e];
-      ip_e++;
-      p3=program[ip_e];
-      if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        cast_overflow=(long)registers[p1]-(long)registers[p2];
-        if(cast_overflow>max || cast_overflow<min){
-          printf("\nOverflow Aritmetico\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          registers[p3]=registers[p1]-registers[p2];
-          break;
-        }
-      }
+      sub()
+      break;
     }
     case MUL:{
-      ip_e++;
-      p1=program[ip_e];
-      ip_e++;
-      p2=program[ip_e];
-      ip_e++;
-      p3=program[ip_e];
-      if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        cast_overflow=(long)registers[p1]*(long)registers[p2];
-        if(cast_overflow>max || cast_overflow<min){
-          printf("\nOverflow Aritmetico\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          registers[p3]=registers[p1]*registers[p2];
-          break;
-        }
-      }
+      mul();
+      break;
     }
     case DIV:{
-      ip_e++;
-      p1=program[ip_e];
-      ip_e++;
-      p2=program[ip_e];
-      ip_e++;
-      p3=program[ip_e];
-      if (p1<0 || p1>31 || p2<0 || p2>31 || p3<0 || p3>31){
-        printf("\nErrore registro\n");
-        valuta_esegui(0);
-        break;
-      }
-      if(registers[p2]==0){
-        printf("\nDivisore è 0\n");
-        valuta_esegui(0);
-        break;
-      }else{
-        cast_overflow=(long)registers[p1]/(long)registers[p2];
-        if(cast_overflow>max || cast_overflow<min){
-          printf("\nOverflow Aritmetico\n");
-          valuta_esegui(0);
-          break;
-        }else{
-          registers[p3]=registers[p1]/registers[p2];
-          break;
-        }
-      }
+      div();
+      break;
     }
     case DISPLAY:{
       ip_e++;
