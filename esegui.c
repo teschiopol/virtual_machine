@@ -385,7 +385,7 @@ void valuta_esegui(int istr){
       break;
     }
     case SUB:{
-      sub()
+      sub();
       break;
     }
     case MUL:{
